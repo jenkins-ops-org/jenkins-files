@@ -1,0 +1,118 @@
+
+import java.text.SimpleDateFormat
+
+ecRegistry = "https://758637906269.dkr.ecr.us-east-1.amazonaws.com/connector-dev"
+ecr_repo = "758637906269.dkr.ecr.us-east-1.amazonaws.com/connector-dev"
+ecr_tag="connector-dev"
+project = 'hello-world'  
+branch = "master"    
+gitCreds = 'cred7864'      
+build_dir = '/var/lib/jenkins/node/workspace/test-ecs-pipe/target'  
+execute_dir= '/var/lib/jenkins/node/workspace/test-ecs-pipe'
+docker_files = "/var/lib/jenkins/node/workspace/test-ecs-pipe/Dockerfiles"
+deploy_dir = "hello-artifactory/${env.BUILD_NUMBER}"
+s3_cmd = "aws s3 cp"
+war="mavenproject1-1.0-SNAPSHOT.war"
+ecr_cmd="aws ecr describe-images"
+
+
+action="update"
+reg="us-east-1"
+ecs_svc="test-service-5"
+clus_name="connector-clus"
+count=1
+ecs_api="https://37mwxnme44.execute-api.us-east-1.amazonaws.com/ecs/"
+
+
+
+
+
+
+def checkout() 
+{
+   git url: "https://github.com/jenkins-ops-org/${project}.git", branch: "${branch}", credentialsId: "${gitCreds}"
+       
+   		
+}
+
+def maven_build() 
+{
+		dir(".") {
+		    withEnv(["MAVEN=/opt/apps/maven/bin", "PATH=${PATH}:/opt/apps/maven/bin"]) {
+		        sh "mvn clean package"   
+		    }
+		}
+}
+
+
+def s3() {
+   echo "${env.BUILD_NUMBER}"
+   sh  "${s3_cmd} ${build_dir}/${war} s3://${deploy_dir}/${war}"
+   sh  "cp -r ${build_dir}/${war} ${docker_files}"
+}
+
+
+def docker_build() 
+{
+   sh "docker build -t ${ecr_repo}:tom-${env.BUILD_NUMBER} --pull=true --file=${docker_files}/tomcat-dockerfile ${docker_files}"
+}
+
+
+def docker_push()
+
+{
+    sh "docker push ${ecr_repo}:tom-${env.BUILD_NUMBER}"
+}
+
+
+def ecs_deploy()
+{
+  
+    LATEST_IMAGE_NO = sh (
+		script: ''' aws ecr describe-images --repository-name connector-dev --query "sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]" --output text ''' ,
+	    returnStdout: true
+	    ).trim()
+	    echo  "${LATEST_IMAGE_NO}"
+
+    sh "python /var/lib/jenkins/node/workspace/test-ecs-pipe/update.py -a update -r ${reg} -s ${ecs_svc} -c ${clus_name} -i ${ecr_repo}:${LATEST_IMAGE_NO} -d ${count} -l ${ecs_api}"
+    currentBuild.result = 'SUCCESS'    
+        
+}
+
+
+try{
+		
+	
+		node('ec2') 
+       {
+				
+				
+				stage('Checkout') {
+				    checkout()
+				}
+	 			
+			    stage('Maven Build') {
+					maven_build()  
+				}
+				
+				stage('Copy to Artifacts') {
+						s3()
+				}
+		        stage("Docker Build") {
+						docker_build()
+				}	
+				
+				stage("Docker Push") {
+						docker_push()
+				}	
+				
+				 stage("ECS DEPLOY") {
+						ecs_deploy()
+				}	
+      
+    }
+} finally {
+		if (currentBuild.result == 'SUCCESS') {
+				stage("Announce") {}
+		}
+}

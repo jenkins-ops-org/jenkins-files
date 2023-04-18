@@ -2,7 +2,7 @@ pipeline {
     agent any
     stages {
         stage('Hello') {
-            steps {
+            dir('api') {
                 sh script:"bash $WORKSPACE/hello-world/scripts/helo.sh"
             }
         }

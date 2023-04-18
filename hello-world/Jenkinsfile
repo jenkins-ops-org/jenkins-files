@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                sh script:"ls -l $WORKSPACE"
+                sh script:"ls -l $WORKSPACE/hello-world/scripts/"
             }
         }
     }

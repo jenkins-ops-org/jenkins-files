@@ -1,5 +1,6 @@
 def branch = 'master'
 def repoUrl = 'https://github.com/jenkins-ops-org/jenkins-files.git'
+def GIT_CREDENTIALS_ID = 'shagd<sgdajsgdsj'
 
 pipeline {
     agent any

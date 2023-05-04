@@ -8,15 +8,24 @@ pipeline {
          stage('Adding the version to the latest commit as a tag') {
             steps {
                 
-                withCredentials([usernamePassword(credentialsId: "${GIT_CREDENTIALS_ID}", 
+                withCredentials([usernamePassword(credentialsId: GIT_CREDENTIALS_ID, 
                                                   passwordVariable: 'GIT_PASSWORD', 
                                                   usernameVariable: 'GIT_USERNAME')]) 
+                
+                 sh '''
+                        git config --global credential.username $GIT_USERNAME
+                        git config --global credential.helper '!f() { echo password=$GIT_PASSWORD; }; f'
+                    '''
                 {
                     sh "git tag ${BUILD_NUMBER}"
                     sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repoUrl} -tag"
                   }
                 
                 
+                
+                
+  
+}
               
             }
         }

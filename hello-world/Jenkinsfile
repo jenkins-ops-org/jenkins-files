@@ -1,6 +1,6 @@
 def branch = 'master'
 def repoUrl = 'https://github.com/jenkins-ops-org/jenkins-files.git'
-def GIT_CREDENTIALS_ID = 'shagd<sgdajsgdsj'
+//def GIT_CREDENTIALS_ID = 'shagd<sgdajsgdsj'
 
 pipeline {
     agent any
@@ -12,8 +12,8 @@ pipeline {
                                                   passwordVariable: 'GIT_PASSWORD', 
                                                   usernameVariable: 'GIT_USERNAME')]) 
                 {
-                sh "git tag ${version}"
-                sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repoUrl} -tag"
+                    sh "git tag ${BUILD_NUMBER}"
+                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repoUrl} -tag"
                   }
                 
                 

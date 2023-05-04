@@ -1,10 +1,8 @@
-pipeline {
-    agent any
-    {
+stages {
         stage('Hello') {
-            dir('api') {
+            steps {
+                sh script:"ls -l $WORKSPACE/hello-world/scripts/"
                 sh script:"bash $WORKSPACE/hello-world/scripts/helo.sh"
             }
-        }   
+        }
     }
-}

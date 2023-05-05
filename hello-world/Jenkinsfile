@@ -17,7 +17,7 @@ pipeline {
                 
                 sshagent(['github_key']){
                     git branch: "master",
-                    url: 'git@github.com:jenkins-ops-org/jenkins-files.git'
+                    url: "$repo"
                    
             }
         }

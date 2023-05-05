@@ -1,3 +1,9 @@
+def branch = 'master'
+def repo = 'git@github.com:jenkins-ops-org/jenkins-files.git'
+def Build = "$BUILD_NUMBER"
+
+
+
 pipeline {
     agent any
     
@@ -11,7 +17,7 @@ pipeline {
                 
                 sshagent(['github_key']){
                     git branch: "master",
-                    url: "$repo"
+                    url: 'git@github.com:jenkins-ops-org/jenkins-files.git'
                    
             }
         }

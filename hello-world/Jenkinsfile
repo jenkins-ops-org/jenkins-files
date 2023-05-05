@@ -10,7 +10,7 @@ pipeline {
          stage('Adding the version to the latest commit as a tag') {
             steps {
                 
-               sshagent(['ad928936-41d1-4395-a9db-4d6aa46d35ed']) {
+               sshagent(['559ff7bc-3d6a-4a28-bb7b-6a18fb5dfe08']) {
                   
 
                   sh "git config user.email chakraborty.rock@gmail.com"

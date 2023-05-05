@@ -20,8 +20,8 @@ pipeline {
                     sh "git config --global credential.username $GIT_USERNAME"
                     sh "git config --global credential.helper '!f() { echo password=$GIT_PASSWORD; }; f'"
                     sh "git tag ${BUILD_NUMBER}"
-                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repoUrl} --tag"
-                    sh " git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/nik786/jenkins-ops-org.git"
+                    //sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@${repoUrl} --tag"
+                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/nik786/jenkins-ops-org.git --tag"
                     //git push git@github.com:nik786/git-test-2.git
                     
                      //git push https://nik786:****@https://github.com/jenkins-ops-org/jenkins-files.git --tag

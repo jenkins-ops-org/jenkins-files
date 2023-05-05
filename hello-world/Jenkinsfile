@@ -10,8 +10,8 @@ pipeline {
             steps {
                 
                 sshagent(['github_key']){
-                    git branch: 'master',
-                    url: $repo
+                    git branch: "master",
+                    url: "$repo"
                    
             }
         }

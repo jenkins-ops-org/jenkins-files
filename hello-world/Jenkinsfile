@@ -10,7 +10,7 @@ pipeline {
          stage('Git Push & Tagging') {
             steps {
                 
-               sshagent(['559ff7bc-3d6a-4a28-bb7b-6a18fb5dfe08']) {
+               sshagent(['github_key']) {
                   
 
                   sh "git config user.email chakraborty.rock@gmail.com"

@@ -30,9 +30,6 @@ pipeline {
 
                   sh "git config user.email chakraborty.rock@gmail.com"
                   sh "git config user.name nik786"
-                  sh "git config --list"
-                 
-                 
                   sh "git tag $Build"
                   sh "git push $repo --tags" 
 

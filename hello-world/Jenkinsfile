@@ -14,7 +14,7 @@ pipeline {
     
     stage('Tagging') {
             steps {
-                sh "echo "executing tagging stage""
+                sh "echo executing tagging stage"
                 }
         }
     

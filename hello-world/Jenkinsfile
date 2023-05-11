@@ -4,7 +4,7 @@ pipeline {
         stage('Hello') {
             steps {
                script {
-               if ( 97 < 99) {
+               if ( 99 < 99) {
                currentBuild.result = 'FAILURE'
                error("FAILED")
                }

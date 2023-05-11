@@ -5,6 +5,9 @@ pipeline {
             steps {
                 sh script:"bash $WORKSPACE/hello-world/scripts/helo.sh"
             }
+            if( 98 < 99 ) {
+           currentBuild.result = 'FALIURE'
+           return
         }
     }
 }

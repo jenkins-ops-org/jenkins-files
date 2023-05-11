@@ -7,6 +7,9 @@ try {
     	
         stage('STAGE2'){
             echo 'EXECUTE STAGE2'
+	    script {
+            error "This pipeline stops here!"
+        }	
     	}
     	
         stage('STAGE3'){

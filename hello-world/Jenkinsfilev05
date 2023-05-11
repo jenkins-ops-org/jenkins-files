@@ -1,0 +1,41 @@
+def branch = 'master'
+def repo = 'git@github.com:jenkins-ops-org/jenkins-files.git'
+def Build = "$BUILD_NUMBER"
+
+
+
+pipeline {
+    agent any
+    
+   
+    
+    stages {
+
+
+          stage('Checkout') {
+            steps {
+                
+                sshagent(['github_key']){
+                    git branch: "master",
+                    url: "$repo"
+                   
+            }
+        }
+          }
+         stage('Git Push & Tagging') {
+            steps {
+                
+               sshagent(['github_key']) {
+                  
+
+                  sh "git config user.email chakraborty.rock@gmail.com"
+                  sh "git config user.name nik786"
+                  sh "git tag $Build"
+                  sh "git push $repo --tags" 
+
+               }
+              
+            }
+        }
+    }
+}

@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+    stages {
+        stage('Hello') {
+            steps {
+               script {
+               if ( 97 < 99) {
+               currentBuild.result = 'FAILURE'
+               error("FAILED")
+               }
+    }
+}
+    }
+    }
+}

@@ -11,7 +11,7 @@ try {
     	
         stage('STAGE3'){
             echo 'EXECUTE STAGE3'
-            throw new RuntimeException("doNotBuildRelease")
+            throw new RuntimeException("failed")
     	}
     	
         stage('STAGE4'){
@@ -24,12 +24,10 @@ try {
 } catch (error) {
     errorDescription = error.getMessage()
     
-    if (errorDescription == "doNotBuildRelease") {
+    if (errorDescription == "failed") {
         currentBuild.result = 'SUCCESS'
     } else {
         currentBuild.result = 'FAILURE'
         throw(error)
     }
-} finally {
-    println("Send email notification")
-}
+} 

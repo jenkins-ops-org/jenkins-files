@@ -12,6 +12,7 @@ try {
         stage('STAGE3'){
             echo 'EXECUTE STAGE3'
             throw new RuntimeException("failed")
+	    error('Aborting the build.')	
     	}
     	
         stage('STAGE4'){

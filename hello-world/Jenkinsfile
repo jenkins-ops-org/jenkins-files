@@ -1,41 +1,35 @@
-def branch = 'master'
-def repo = 'git@github.com:jenkins-ops-org/jenkins-files.git'
-def Build = "$BUILD_NUMBER"
-
-
-
-pipeline {
-    agent any
+try {
+    node('master'){
     
-   
-    
-    stages {
+        stage('STAGE1'){
+            echo 'EXECUTE STAGE1'
+    	}
+    	
+        stage('STAGE2'){
+            echo 'EXECUTE STAGE2'
+    	}
+    	
+        stage('STAGE3'){
+            echo 'EXECUTE STAGE3'
+            throw new RuntimeException("doNotBuildRelease")
+    	}
+    	
+        stage('STAGE4'){
+	    // Build release
+            echo 'EXECUTE STAGE4'
+    	}
 
-
-          stage('Checkout') {
-            steps {
-                
-                sshagent(['github_key']){
-                    git branch: "master",
-                    url: "$repo"
-                   
-            }
-        }
-          }
-         stage('Git Push & Tagging') {
-            steps {
-                
-               sshagent(['github_key']) {
-                  
-
-                  sh "git config user.email chakraborty.rock@gmail.com"
-                  sh "git config user.name nik786"
-                  sh "git tag $Build"
-                  sh "git push $repo --tags" 
-
-               }
-              
-            }
-        }
+    	currentBuild.result = 'SUCCESS'
     }
+} catch (error) {
+    errorDescription = error.getMessage()
+    
+    if (errorDescription == "doNotBuildRelease") {
+        currentBuild.result = 'SUCCESS'
+    } else {
+        currentBuild.result = 'FAILURE'
+        throw(error)
+    }
+} finally {
+    println("Send email notification")
 }
